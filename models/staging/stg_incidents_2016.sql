@@ -1,9 +1,43 @@
+
+----------------------------------
+--------CONFIGURATION-------------
+----------------------------------
+
 {{ config(materialized='table') }}
 
-with table_stg as (
+----------------------------------
+----------------------------------
 
-    select * from {{ ref('base_incidents_2016') }}
+----------------------------------
+-------------RAW DATA-------------
+----------------------------------
 
+with raw as (
+    select 
+        *
+    from {{ ref('base_incidents_2016') }}
+),
+
+----------------------------------
+---------TRANSFORMATION-----------
+----------------------------------
+
+
+filter_data as ( 
+    select 
+        CAST(descript AS STRING) AS descript
+        ,CAST(address AS STRING) AS address
+        ,DATE(timestamp) AS timestamp
+    from raw
 )
 
-select * from table_stg
+----------------------------------
+----------------------------------
+
+----------------------------------
+-----------FINAL OUTPUT-----------
+----------------------------------
+
+
+select * from filter_data
+

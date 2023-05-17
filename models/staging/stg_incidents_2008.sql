@@ -1,9 +1,43 @@
+
+----------------------------------
+--------CONFIGURATION-------------
+----------------------------------
+
 {{ config(materialized='table') }}
 
-with table_stg as (
+----------------------------------
+----------------------------------
 
-    select * from {{ ref('base_incidents_2008') }}
+----------------------------------
+-------------RAW DATA-------------
+----------------------------------
 
+with raw as (
+    select 
+        *
+    from {{ ref('base_incidents_2008') }}
+),
+
+----------------------------------
+---------TRANSFORMATION-----------
+----------------------------------
+
+
+filter_data as ( 
+    select 
+        descript
+        ,address
+        ,timestamp
+    from bigquery-public-data.austin_incidents.incidents_2008
 )
 
-select * from table_stg
+----------------------------------
+----------------------------------
+
+----------------------------------
+-----------FINAL OUTPUT-----------
+----------------------------------
+
+
+select * from filter_data
+
