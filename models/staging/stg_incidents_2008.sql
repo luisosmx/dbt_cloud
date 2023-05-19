@@ -25,10 +25,10 @@ with raw as (
 
 filter_data as ( 
     select 
-        descript
-        ,address
-        ,timestamp
-    from bigquery-public-data.austin_incidents.incidents_2008
+        CAST(descript AS STRING) AS descript
+        ,CAST(address AS STRING) AS address
+        ,DATE(timestamp) AS data
+    from raw
 )
 
 ----------------------------------

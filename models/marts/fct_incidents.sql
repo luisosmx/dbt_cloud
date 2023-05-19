@@ -1,4 +1,3 @@
-
 ----------------------------------
 --------CONFIGURATION-------------
 ----------------------------------
@@ -12,24 +11,33 @@
 -------------RAW DATA-------------
 ----------------------------------
 
-with raw as (
-    select 
+with union_data as (
+    select
         *
-    from {{ ref('base_incidents_2011') }}
-),
+    from {{ ref('stg_incidents_2008') }}
+    union all
+    select
+        *
+    from {{ ref('stg_incidents_2009') }}
+    union all
+    select
+        *
+    from {{ ref('stg_incidents_2010') }}
+    union all
+    select
+        *
+    from {{ ref('stg_incidents_2011') }}
+    union all
+    select
+        *
+    from {{ ref('stg_incidents_2016') }}
+)
 
 ----------------------------------
 ---------TRANSFORMATION-----------
 ----------------------------------
 
 
-filter_data as ( 
-    select 
-        CAST(descript AS STRING) AS descript
-        ,CAST(address AS STRING) AS address
-        ,DATE(timestamp) AS data
-    from raw
-)
 
 ----------------------------------
 ----------------------------------
@@ -39,5 +47,4 @@ filter_data as (
 ----------------------------------
 
 
-select * from filter_data
-
+select * from union_data
