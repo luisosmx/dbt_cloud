@@ -27,7 +27,7 @@ filter_data as (
     select 
         CAST(descript AS STRING) AS descript
         ,CAST(address AS STRING) AS address
-        ,DATE(timestamp) AS timestamp
+        ,DATE(timestamp) AS data
     from raw
 )
 
