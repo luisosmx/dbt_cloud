@@ -1,4 +1,3 @@
-
 ----------------------------------
 --------CONFIGURATION-------------
 ----------------------------------
@@ -13,25 +12,26 @@
 ----------------------------------
 
 with raw as (
-    select 
+    select
         *
-    from {{ ref('base_state_testing_and_outcomes') }}
+    from {{ ref('stg_state_testing_and_outcomes') }}  
 ),
 
 ----------------------------------
 ---------TRANSFORMATION-----------
 ----------------------------------
-filter_data as ( 
+number_hospitalized as (
     select
-       date
-      ,state
-      ,IFNULL(hospitalized, 0) AS hospitalized
-      ,IFNULL(negative, 0) AS negative
-      ,IFNULL(positive, 0) AS positive
-      ,IFNULL(death_confirmed, 0) AS death_confirmed
+    date
+    ,state
+    ,sum(hospitalized) as hospitalized
+    ,sum(positive) as positive
+    ,sum(negative) as negative
+    ,sum(death_confirmed) as confirmed_death
     from raw
+    group by 1, 2
+    order by sum(death_confirmed) desc 
 )
-
 ----------------------------------
 ----------------------------------
 
@@ -40,5 +40,4 @@ filter_data as (
 ----------------------------------
 
 
-select * from filter_data
-
+select * from number_hospitalized
