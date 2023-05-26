@@ -15,7 +15,7 @@
 
 with raw as (
     select 
-        *
+        
     from {{ ref('base_INE_DISTRITO') }}
 ),
 
